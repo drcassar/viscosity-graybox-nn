@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from models import ViscosityModelGraybox2 as model
+from models import ViscosityModelGraybox2 as Model
 from models import train_model
 from data import get_data
 
@@ -24,12 +24,12 @@ max_epochs = 200
 
 # Reserving a holdout dataset
 h_path = rf'./model_files/experiment_{exp_num:02d}_model_with_holdout.pt'
-model_h = train_model(model, patience, data, compounds, holdout_size,
+model_h = train_model(Model, patience, data, compounds, holdout_size,
                       dataloader_num_workers, max_epochs, save_path=h_path)
 
 # Training the final model with all the data
 f_path = rf'./model_files/experiment_{exp_num:02d}_model_final.pt'
-model_f = train_model(model, patience, data, compounds, False,
+model_f = train_model(Model, patience, data, compounds, False,
                       dataloader_num_workers, max_epochs, save_path=f_path)
 
 if COMPUTE_METRICS:
