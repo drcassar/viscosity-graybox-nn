@@ -633,7 +633,7 @@ class ViscosityModelGraybox2(pl.LightningModule):
 
     def eval_from_dict(self, composition_dict, T):
         composition_cols = list(composition_dict.keys())
-        dataframe = pd.DataFrame.from_dict({**composition_dict, 'T':T})
+        dataframe = pd.DataFrame.from_dict({**composition_dict, 'temperature':T})
         log_viscosity = self.eval_from_df(dataframe, composition_cols)
         return log_viscosity
 
@@ -781,24 +781,3 @@ def train_model(model_class, patience, data, composition_cols, holdout,
 
     return model
 
-
-def load_model(model_class, path, data=False, composition_cols=False,
-               holdout=False, n_dataloaders=False):
-
-    model = torch.load(path)
-
-    if data is not False:
-
-        state_dict = model.state_dict()
-
-        model = model_class(
-            data,
-            composition_cols,
-            holdout,
-            n_dataloaders,
-        )
-
-        model.load_state_dict(state_dict)
-        model.prepare_data()
-
-    return model
