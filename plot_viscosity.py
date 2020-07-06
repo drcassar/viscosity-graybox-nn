@@ -24,7 +24,7 @@ model2 = torch.load(path2)
 compositions = [
     '(SiO2)2(CaO)1(MgO)1',
     '(SiO2)7(Na2O)2(CoO)1',
-    '(SiO2)75(Rb2O)25',
+    '(SiO2)3(Rb2O)1',
 ]
 
 for comp in compositions:
