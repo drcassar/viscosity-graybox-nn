@@ -37,7 +37,7 @@ for comp in compositions:
     )
 
     axe.set_ylabel('$\log_{10}(\eta)$  [$\eta$ in Pa.s]')
-    axe.set_xlabel('$1/T$  [K]')
+    axe.set_xlabel('$1/T$  [1/K]')
 
     data_comp = viscosityFromString(comp)
 
