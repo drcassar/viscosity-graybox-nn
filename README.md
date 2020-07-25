@@ -1,4 +1,7 @@
 # Gray-box Neural Network Viscosity Model
+[![DOI](https://zenodo.org/badge/277125509.svg)](https://zenodo.org/badge/latestdoi/277125509)
+[![arXiv](https://img.shields.io/badge/arXiv-2007.03719-b31b1b.svg)](https://arxiv.org/abs/2007.03719)
+
 This repository has a gray-box Neural Network to predict the viscosity of liquids. It was trained using PyTorch/PyTorch-lightning on the SciGlass database. For more information, please see the pre-print "Reproducible gray-box neural network for predicting the fragility index and the temperature-dependency of viscosity".
 
 ## How to use
@@ -20,6 +23,9 @@ To generate the fragility ternary plot, run the script "plot_fragility.py". It i
 ## Issues and how to contribute
 If you find bugs or have questions, please open an issue. PRs are most welcome.
 
+## How to cite
+D.R. Cassar, Reproducible gray-box neural network for predicting the fragility index and the temperature-dependency of viscosity, ArXiv:2007.03719. (2020). http://arxiv.org/abs/2007.03719.
+  
 ## License
 [GPL](LICENSE)
 
