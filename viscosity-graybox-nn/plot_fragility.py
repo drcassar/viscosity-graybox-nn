@@ -1,8 +1,8 @@
-#!/usr/bin/env python3
-
+import torch
 import ternary
 from ternary.helpers import simplex_iterator
 from matplotlib import pyplot as plt
+from pathlib import Path
 
 from models import ViscosityModelGraybox1 as Model
 from models import load_model
@@ -16,11 +16,10 @@ compounds = [
 ]
 
 data = get_data(compounds, round_comp_decimal=3, round_temperature_decimal=0)
-dataloader_num_workers = 4
 
-f_path = rf'./model_files/experiment_01_model_final.pt'
-model = load_model(Model, f_path, data, compounds, False,
-                   dataloader_num_workers)
+path = Path(r'./model_files/experiment_01_model_final.pt')
+model = torch.load(path1)
+
 
 def generate_heatmap_data(comp1, comp2, comp3, precision=5):
 

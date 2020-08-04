@@ -1,9 +1,8 @@
-#!/usr/bin/env python3
-
 import torch
 import numpy as np
 from matplotlib import pyplot as plt
 from glasspy.data.viscosity import viscosityFromString
+from pathlib import Path
 
 
 plt.rcParams.update({
@@ -15,10 +14,10 @@ plt.rcParams.update({
     'mathtext.fontset': 'dejavuserif',
 })
 
-path1 = rf'./model_files/experiment_01_model_final.pt'
+path1 = Path(r'./model_files/experiment_01_model_final.pt')
 model1 = torch.load(path1)
 
-path2 = rf'./model_files/experiment_02_model_final.pt'
+path2 = Path(r'./model_files/experiment_02_model_final.pt')
 model2 = torch.load(path2)
 
 compositions = [
