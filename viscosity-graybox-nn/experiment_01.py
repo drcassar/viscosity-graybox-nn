@@ -1,14 +1,15 @@
-#!/usr/bin/env python3
-
 from models import ViscosityModelGraybox1 as Model
 from models import train_model
 from data import get_data
+from pathlib import Path
 
+
+### Config
+
+exp_num = 1
 
 PLOT_2DHISTOGRAM = True
 COMPUTE_METRICS = True
-
-exp_num = 1
 
 compounds = [
     'SiO2', 'Al2O3', 'Na2O', 'CaO', 'MgO', 'B2O3', 'K2O', 'BaO', 'SrO', 'SnO2',
@@ -16,19 +17,26 @@ compounds = [
     'As2O3', 'FeO', 'La2O3', 'MnO', 'GeO2', 'Y2O3', 'Cr2O3', 'Bi2O3', 'CdO',
 ]
 
-data = get_data(compounds, round_comp_decimal=3, round_temperature_decimal=0)
 patience = 13
 holdout_size = 0.2
 dataloader_num_workers = 4
 max_epochs = 200
+fig_save_path = Path(r'./plots/')
 
-# Reserving a holdout dataset
-h_path = rf'./model_files/experiment_{exp_num:02d}_model_with_holdout.pt'
+# path for the model trained with a reserved holdout dataset
+h_path = Path(rf'./model_files/experiment_{exp_num:02d}_model_with_holdout.pt')
+
+# path for the model trained without a reserved holdout dataset
+f_path = Path(rf'./model_files/experiment_{exp_num:02d}_model_final.pt')
+
+
+### Code
+
+data = get_data(compounds, round_comp_decimal=3, round_temperature_decimal=0)
+
 model_h = train_model(Model, patience, data, compounds, holdout_size,
                       dataloader_num_workers, max_epochs, save_path=h_path)
 
-# Training the final model with all the data
-f_path = rf'./model_files/experiment_{exp_num:02d}_model_final.pt'
 model_f = train_model(Model, patience, data, compounds, False,
                       dataloader_num_workers, max_epochs, save_path=f_path)
 
@@ -152,7 +160,7 @@ if PLOT_2DHISTOGRAM:
     ax2.xaxis.set_ticks([-2, -1, 0, 1, 2])
 
     fig.savefig(
-        rf'./plots/2D_histogram_experiment_{exp_num:02d}.pdf',
+        fig_save_path / rf'2D_histogram_experiment_{exp_num:02d}.pdf',
         dpi=150,
         bbox_inches='tight',
         pad_inches=2e-2,

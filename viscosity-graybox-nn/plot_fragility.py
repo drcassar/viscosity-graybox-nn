@@ -1,27 +1,40 @@
 import torch
 import ternary
-from ternary.helpers import simplex_iterator
-from matplotlib import pyplot as plt
 from pathlib import Path
-
-from models import ViscosityModelGraybox1 as Model
-from models import load_model
-from data import get_data
+from matplotlib import pyplot as plt
+from ternary.helpers import simplex_iterator
 
 
-compounds = [
-    'SiO2', 'Al2O3', 'Na2O', 'CaO', 'MgO', 'B2O3', 'K2O', 'BaO', 'SrO', 'SnO2',
-    'ZrO2', 'TiO2', 'ZnO', 'Li2O', 'P2O5', 'PbO', 'Fe2O3', 'SO3', 'Sb2O3',
-    'As2O3', 'FeO', 'La2O3', 'MnO', 'GeO2', 'Y2O3', 'Cr2O3', 'Bi2O3', 'CdO',
+### Config
+
+round_fragility = True
+
+scale = 100     # takes some time to compute, reduce to 10 to see what happens
+round_base = 5  # round fragility to the nearest multiple of this number
+fig_save_path = Path(r'./plots/')
+
+# Choose the ternanies that you want to compute
+ternaries = [
+    ('Na2O', 'SiO2', 'CaO'),
+    # ('Na2O', 'SiO2', 'Al2O3'),
 ]
 
-data = get_data(compounds, round_comp_decimal=3, round_temperature_decimal=0)
+# Translator to beautify the plot labels
+chemtrans = {
+    'SiO2': r'$\mathrm{SiO_2}$',
+    'Na2O': r'$\mathrm{Na_2O}$',
+    'Li2O': r'$\mathrm{Li_2O}$',
+    'CaO': r'$\mathrm{CaO}$',
+}
+
+
+### Code
 
 path = Path(r'./model_files/experiment_01_model_final.pt')
-model = torch.load(path1)
+model = torch.load(path)
 
 
-def generate_heatmap_data(comp1, comp2, comp3, precision=5):
+def gen_heatmap(comp1, comp2, comp3, scale):
 
     def computeValue(comp1, comp2, comp3, quant1, quant2, quant3):
         glass = {
@@ -33,33 +46,19 @@ def generate_heatmap_data(comp1, comp2, comp3, precision=5):
         return m
 
     d = dict()
-    for (i, j, k) in simplex_iterator(precision):
+    for (i, j, k) in simplex_iterator(scale):
         d[(i, j, k)] = computeValue(comp1, comp2, comp3, i, j, k,)
     return d
 
 
-precision = 100
-round_base = 5
-
-ternaries = [
-    ('Na2O', 'SiO2', 'CaO'),
-]
-
-chemtrans = {
-    'SiO2': r'$\mathrm{SiO_2}$',
-    'Na2O': r'$\mathrm{Na_2O}$',
-    'Li2O': r'$\mathrm{Li_2O}$',
-    'CaO': r'$\mathrm{CaO}$',
-}
-
 for comp1, comp2, comp3 in ternaries:
 
-    data = generate_heatmap_data(comp1, comp2, comp3, precision)
+    data = gen_heatmap(comp1, comp2, comp3, scale)
 
-    for key in data:
-        data[key] = round_base * round(data[key]/round_base)
+    if round_fragility:
+        data = {key: round_base * round(data[key]/round_base) for key in data}
 
-    fig, tax = ternary.figure(scale=precision)
+    fig, tax = ternary.figure(scale=scale)
 
     tax.heatmap(
         data,
@@ -75,24 +74,24 @@ for comp1, comp2, comp3 in ternaries:
     tax.boundary()
 
     tax.left_axis_label(
-        chemtrans[comp3] + ' ' + 'mol%',
+        chemtrans.get(comp3, comp3) + ' mol%',
         fontsize=10,
         offset=0.14,
     )
     tax.right_axis_label(
-        chemtrans[comp2] + ' ' + 'mol%',
+        chemtrans.get(comp2, comp2) + ' mol%',
         fontsize=10,
         offset=0.14,
     )
     tax.bottom_axis_label(
-        chemtrans[comp1] + ' ' + 'mol%',
+        chemtrans.get(comp1, comp1) + ' mol%',
         fontsize=10,
         offset=0.14,
     )
 
-    tax.ticks(axis='lbr', linewidth=1, multiple=10, offset=0.03)
+    tax.ticks(axis='lbr', linewidth=1, multiple=scale/10, offset=0.03)
 
-    fig.savefig(rf'./plots/ternary_fragility_{comp1}_{comp2}_{comp3}.png',
+    fig.savefig(fig_save_path / rf'ternary_fragility_{comp1}_{comp2}_{comp3}.png',
                 dpi=300,
                 bbox_inches='tight',
                 pad_inches=2e-2)

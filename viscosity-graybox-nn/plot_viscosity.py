@@ -5,6 +5,19 @@ from glasspy.data.viscosity import viscosityFromString
 from pathlib import Path
 
 
+### Config
+
+fig_save_path = Path(r'./plots/')
+
+compositions = [
+    '(SiO2)2(CaO)1(MgO)1',
+    '(SiO2)7(Na2O)2(CoO)1',
+    '(SiO2)3(Rb2O)1',
+]
+
+
+### Code
+ 
 plt.rcParams.update({
     'font.family': 'serif',
     'font.serif': 'DejaVu Serif',
@@ -19,12 +32,6 @@ model1 = torch.load(path1)
 
 path2 = Path(r'./model_files/experiment_02_model_final.pt')
 model2 = torch.load(path2)
-
-compositions = [
-    '(SiO2)2(CaO)1(MgO)1',
-    '(SiO2)7(Na2O)2(CoO)1',
-    '(SiO2)3(Rb2O)1',
-]
 
 for comp in compositions:
 
@@ -75,7 +82,7 @@ for comp in compositions:
     axe.legend(loc=2)
 
     fig.savefig(
-        rf'./plots/viscosity_plot_{comp}.pdf',
+        fig_save_path / rf'viscosity_plot_{comp}.pdf',
         dpi=150,
         bbox_inches='tight',
         pad_inches=2e-2,
