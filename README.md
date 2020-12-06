@@ -1,3 +1,5 @@
+This repository will be archieved. Development will continue [here](https://github.com/drcassar/viscnet).
+
 # Gray-box Neural Network Viscosity Model
 [![DOI](https://zenodo.org/badge/277125509.svg)](https://zenodo.org/badge/latestdoi/277125509)
 [![arXiv](https://img.shields.io/badge/arXiv-2007.03719-b31b1b.svg)](https://arxiv.org/abs/2007.03719)
