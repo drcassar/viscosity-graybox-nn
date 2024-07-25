@@ -13,7 +13,7 @@ setuptools.setup(
         'python-ternary',
         'mendeleev==0.6.0',
         'glasspy==0.3',
-        'torch==1.5.0',
+        'torch==2.2.0',
         'pytorch-lightning==0.7.6',
     ],
     keywords='viscosity, liquids',
